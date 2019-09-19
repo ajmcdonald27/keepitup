@@ -1,0 +1,13 @@
+<title>Signup to Keep-it-app</title>
+
+{% block content %}
+  <h2>Sign up</h2>
+  <p>We store your timezone and reset time so that we can work out when to reset your daily tasks based on your location and preferences.
+     The default reset time will be midnight local time but you can choose any hour of the day to have your tasks reset in case you operate on
+      an unusual schedule.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign up</button>
+  </form>
+{% endblock %}

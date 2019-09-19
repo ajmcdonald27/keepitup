@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Tasks</title>
+</head>
+<body>
+<h2>My Tasks</h2>
+<form action="/keepitapp/tasks/add/" method="post">
+    {% csrf_token %}
+    <label>Task description: </label>
+    <input type="text" name="description"><br>
+    <label>Daily</label>
+    <input type="radio" name="frequency" value="Daily" checked>
+    <label>Weekly</label>
+    <input type="radio" name="frequency" value="Weekly">
+    <input type="submit" value="Add task">
+</form>
+{% if task_list %}
+<table>
+    <tr>
+        <th>Task</th>
+        <th>Daily/Weekly</th>
+        <th>Current streak</th>
+        <th>Best streak</th>
+        <th>Total count</th>
+        <th>Done</th>
+        <th>Remove</th>
+    </tr>
+    {% for task, completed in task_list.items %}
+    <tr>
+        <td>{{task.description}}</td>
+        <td>{{task.daily_or_weekly}}</td>
+        <td>{{task.current_streak}}</td>
+        <td>{{task.best_streak}}</td>
+        <td>{{task.total_count}}</td>
+        {% if completed %}
+        <td>Done!</td>
+        {% else %}
+        <td><form action="/keepitapp/tasks/check/{{task.id}}/" method="post">
+            {% csrf_token %}
+            <input type="checkbox" value="checked_off" onchange="this.form.submit()">
+        </form></td>
+        {% endif %}
+        <td><form action="/keepitapp/tasks/remove/{{task.id}}/" method="post">
+           {% csrf_token %}
+           <input type="submit" value="Remove task">
+        </form></td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endif %}
+
+<form action="/accounts/logout/" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Logout">
+</form>
+</body>
+</html>
